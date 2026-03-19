@@ -25,8 +25,8 @@ export function FranchiseSection() {
               <span className="text-gradient">Food Business</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              Join our growing network of food entrepreneurs. We provide everything you need to start
-              selling premium frozen foods in your community — from products to training to marketing support.
+              We are open for franchise! Join our growing network of food entrepreneurs. We provide everything you need to start
+              selling premium frozen foods in your community. Message us for more details!
             </p>
             <div className="space-y-3 mb-8">
               {benefits.map((b) => (
