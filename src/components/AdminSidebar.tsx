@@ -1,8 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Package, Truck, BarChart3, ClipboardList, Settings, ChevronLeft, Menu } from "lucide-react";
+import { Package, Truck, BarChart3, ClipboardList, Settings, ChevronLeft, Menu, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const navItems = [
   { title: "Dashboard", url: "/admin", icon: BarChart3 },
@@ -15,6 +17,12 @@ const navItems = [
 export function AdminSidebar() {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success("Signed out");
+  };
 
   return (
     <aside
@@ -27,12 +35,7 @@ export function AdminSidebar() {
         {!collapsed && (
           <span className="font-display text-lg font-bold text-sidebar-primary">Admin</span>
         )}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setCollapsed(!collapsed)}
-          className="text-sidebar-foreground hover:bg-sidebar-accent"
-        >
+        <Button variant="ghost" size="icon" onClick={() => setCollapsed(!collapsed)} className="text-sidebar-foreground hover:bg-sidebar-accent">
           {collapsed ? <Menu className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
       </div>
@@ -58,11 +61,15 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-sidebar-border">
+      <div className="p-4 border-t border-sidebar-border space-y-2">
         <Link to="/" className="flex items-center gap-2 text-sm text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors">
           <ChevronLeft className="h-4 w-4" />
           {!collapsed && <span>Back to Site</span>}
         </Link>
+        <button onClick={handleSignOut} className="flex items-center gap-2 text-sm text-sidebar-foreground/60 hover:text-red-400 transition-colors w-full">
+          <LogOut className="h-4 w-4" />
+          {!collapsed && <span>Sign Out</span>}
+        </button>
       </div>
     </aside>
   );
