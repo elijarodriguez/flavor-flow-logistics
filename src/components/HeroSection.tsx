@@ -22,7 +22,7 @@ export function HeroSection() {
             <span className="text-gradient">Flavors</span> Delivered
           </h1>
           <p className="text-lg md:text-xl mb-8 max-w-lg" style={{ color: "hsl(30 15% 80%)" }}>
-            From our kitchen to your business — premium siomai, longganisa, and more. Quality frozen food products for resellers and franchisees.
+            We manufacture and supply Siomai, our famous Longganisa Calumpit, Skinless, Chili-Garlic, and more. Start your own business at a very affordable price!
           </p>
           <div className="flex flex-wrap gap-4">
             <a href="#products">
