@@ -61,39 +61,51 @@ export type Database = {
       }
       orders: {
         Row: {
+          courier: string | null
           created_at: string
           customer_address: string
           customer_email: string
           customer_name: string
           customer_phone: string
+          delivered_at: string | null
           id: string
           notes: string | null
+          shipped_at: string | null
           status: string
           total: number
+          tracking_number: string | null
           updated_at: string
         }
         Insert: {
+          courier?: string | null
           created_at?: string
           customer_address?: string
           customer_email: string
           customer_name: string
           customer_phone?: string
+          delivered_at?: string | null
           id?: string
           notes?: string | null
+          shipped_at?: string | null
           status?: string
           total?: number
+          tracking_number?: string | null
           updated_at?: string
         }
         Update: {
+          courier?: string | null
           created_at?: string
           customer_address?: string
           customer_email?: string
           customer_name?: string
           customer_phone?: string
+          delivered_at?: string | null
           id?: string
           notes?: string | null
+          shipped_at?: string | null
           status?: string
           total?: number
+          tracking_number?: string | null
           updated_at?: string
         }
         Relationships: []
