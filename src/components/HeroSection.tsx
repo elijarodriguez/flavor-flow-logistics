@@ -13,7 +13,7 @@ export function HeroSection() {
 
       <div className="relative z-10 container mx-auto px-6">
         <div className="max-w-2xl animate-fade-up">
-          <span className="inline-block text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "hsl(38 92% 60%)" }}>
+          <span className="inline-block text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "hsl(0 85% 65%)" }}>
             Premium Frozen Foods
           </span>
           <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight mb-6" style={{ color: "hsl(30 25% 97%)" }}>
