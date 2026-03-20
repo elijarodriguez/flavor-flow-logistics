@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ShoppingCart } from "lucide-react";
+import logo from "@/assets/jimmela_logo.jpg";
 import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
 
