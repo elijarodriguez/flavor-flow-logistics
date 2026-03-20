@@ -16,7 +16,7 @@ export function HeroSection() {
           <span className="inline-block text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "hsl(0 85% 65%)" }}>
             Premium Frozen Foods
           </span>
-          <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight mb-6" style={{ color: "hsl(30 25% 97%)" }}>
+          <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight mb-6" style={{ color: "hsl(0 0% 100%)" }}>
             Authentic Filipino
             <br />
             <span className="text-gradient">Flavors</span> Delivered
