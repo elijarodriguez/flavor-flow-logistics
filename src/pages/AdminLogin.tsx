@@ -35,6 +35,7 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
+          <img src={logo} alt="Jimmela Food Products" className="h-16 w-16 rounded-full object-cover mx-auto mb-4" />
           <h1 className="font-display text-3xl font-bold text-foreground">
             Jimmela <span className="text-primary">Admin</span>
           </h1>
