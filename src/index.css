@@ -6,48 +6,48 @@
 
 @layer base {
   :root {
-    --background: 30 25% 97%;
-    --foreground: 20 20% 12%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
 
-    --card: 30 20% 99%;
-    --card-foreground: 20 20% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
 
-    --popover: 30 20% 99%;
-    --popover-foreground: 20 20% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 12 76% 46%;
-    --primary-foreground: 30 25% 97%;
+    --primary: 0 85% 46%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 30 30% 93%;
-    --secondary-foreground: 20 20% 12%;
+    --secondary: 0 10% 95%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 30 15% 94%;
-    --muted-foreground: 20 10% 45%;
+    --muted: 0 5% 94%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 38 92% 50%;
-    --accent-foreground: 20 20% 12%;
+    --accent: 0 85% 46%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 30 15% 88%;
-    --input: 30 15% 88%;
-    --ring: 12 76% 46%;
+    --border: 0 5% 88%;
+    --input: 0 5% 88%;
+    --ring: 0 85% 46%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 20 20% 8%;
-    --sidebar-foreground: 30 15% 90%;
-    --sidebar-primary: 12 76% 52%;
-    --sidebar-primary-foreground: 30 25% 97%;
-    --sidebar-accent: 20 15% 15%;
-    --sidebar-accent-foreground: 30 15% 90%;
-    --sidebar-border: 20 12% 18%;
-    --sidebar-ring: 12 76% 52%;
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 0 0% 92%;
+    --sidebar-primary: 0 85% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 5% 14%;
+    --sidebar-accent-foreground: 0 0% 92%;
+    --sidebar-border: 0 5% 18%;
+    --sidebar-ring: 0 85% 50%;
 
-    --hero-gradient: linear-gradient(135deg, hsl(20 20% 8% / 0.7), hsl(12 76% 46% / 0.3));
-    --warm-glow: 0 8px 32px hsl(12 76% 46% / 0.15);
-    --card-shadow: 0 4px 20px hsl(20 20% 12% / 0.06);
+    --hero-gradient: linear-gradient(135deg, hsl(0 0% 6% / 0.75), hsl(0 85% 46% / 0.3));
+    --warm-glow: 0 8px 32px hsl(0 85% 46% / 0.15);
+    --card-shadow: 0 4px 20px hsl(0 0% 10% / 0.06);
 
     font-family: 'DM Sans', sans-serif;
   }
