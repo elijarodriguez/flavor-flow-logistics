@@ -9,7 +9,7 @@ export function HeroSection() {
         alt="Assorted siomai dumplings"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, hsl(20 20% 8% / 0.75), hsl(12 76% 46% / 0.25))" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, hsl(0 0% 6% / 0.75), hsl(0 85% 46% / 0.3))" }} />
 
       <div className="relative z-10 container mx-auto px-6">
         <div className="max-w-2xl animate-fade-up">
