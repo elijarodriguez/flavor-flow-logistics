@@ -31,7 +31,7 @@ export function HeroSection() {
               </Button>
             </a>
             <a href="#franchise">
-              <Button variant="heroOutline" size="lg" style={{ borderColor: "hsl(30 25% 97%)", color: "hsl(30 25% 97%)" }}>
+              <Button variant="heroOutline" size="lg" style={{ borderColor: "hsl(0 0% 100%)", color: "hsl(0 0% 100%)" }}>
                 Franchise With Us
               </Button>
             </a>

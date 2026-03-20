@@ -1,13 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Phone, Mail, MapPin } from "lucide-react";
 
 const benefits = [
-  "Low capital investment starting from ₱15,000",
+  "We manufacture and supply Siomai, Longganisa Calumpit, Skinless, Chili-Garlic, and more",
+  "Start your own business at a very affordable price",
   "Complete product training and support",
   "Exclusive territory for your area",
   "Marketing materials provided",
   "Flexible ordering — no minimum monthly quota",
   "High profit margin (40-60%)",
+];
+
+const contactInfo = [
+  { icon: Phone, label: "Phone", value: "0975 798 2690" },
+  { icon: Mail, label: "Email", value: "jimmelafoods@gmail.com" },
+  { icon: MapPin, label: "Location", value: "2nd Floor, ASM Plaza, McArthur Hiway, Caniogan, Calumpit, Philippines" },
 ];
 
 export function FranchiseSection() {
@@ -25,8 +32,9 @@ export function FranchiseSection() {
               <span className="text-gradient">Food Business</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              We are open for franchise! Join our growing network of food entrepreneurs. We provide everything you need to start
-              selling premium frozen foods in your community. Message us for more details!
+              We are open for franchise! Join our growing network of food entrepreneurs.
+              We provide everything you need to start selling premium frozen foods in your community.
+              Message us for more details!
             </p>
             <div className="space-y-3 mb-8">
               {benefits.map((b) => (
@@ -44,19 +52,20 @@ export function FranchiseSection() {
           </div>
 
           <div className="bg-card rounded-2xl p-8 border border-border" style={{ boxShadow: "var(--card-shadow)" }}>
-            <h3 className="font-display text-2xl font-bold text-foreground mb-6">Franchise Packages</h3>
+            <h3 className="font-display text-2xl font-bold text-foreground mb-6">Get In Touch</h3>
+            <p className="text-muted-foreground mb-8">
+              Interested in franchising? Contact us through any of the channels below and we'll get back to you with all the details.
+            </p>
             <div className="space-y-6">
-              {[
-                { name: "Starter Cart", price: "₱15,000", desc: "Food cart setup with initial product supply" },
-                { name: "Business Package", price: "₱35,000", desc: "Complete business setup with branding and equipment" },
-                { name: "Premium Franchise", price: "₱75,000", desc: "Full franchise with exclusive territory and ongoing support" },
-              ].map((pkg) => (
-                <div key={pkg.name} className="p-4 rounded-xl bg-secondary/60 border border-border">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-display font-semibold text-foreground">{pkg.name}</h4>
-                    <span className="font-body font-bold text-primary text-lg">{pkg.price}</span>
+              {contactInfo.map((item) => (
+                <div key={item.label} className="flex items-start gap-4 p-4 rounded-xl bg-secondary/60 border border-border">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <item.icon className="h-5 w-5 text-primary" />
                   </div>
-                  <p className="text-sm text-muted-foreground">{pkg.desc}</p>
+                  <div>
+                    <h4 className="font-display font-semibold text-foreground text-sm">{item.label}</h4>
+                    <span className="text-sm text-muted-foreground">{item.value}</span>
+                  </div>
                 </div>
               ))}
             </div>
