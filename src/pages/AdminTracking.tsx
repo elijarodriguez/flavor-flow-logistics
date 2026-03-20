@@ -5,16 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Search, Package, Truck, AlertTriangle, CheckCircle, Clock, MapPin } from "lucide-react";
+import { Search, Package, Truck, AlertTriangle, CheckCircle, Clock, Bell } from "lucide-react";
 import { toast } from "sonner";
+
+const LOW_STOCK_THRESHOLD = 50;
 
 export default function AdminTracking() {
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [trackingForm, setTrackingForm] = useState({ tracking_number: "", courier: "" });
+  const [bulkMode, setBulkMode] = useState(false);
+  const [bulkEdits, setBulkEdits] = useState<Record<string, string>>({});
   const queryClient = useQueryClient();
 
   // ── Inventory Data ──
@@ -56,6 +59,25 @@ export default function AdminTracking() {
     onError: () => toast.error("Failed to update"),
   });
 
+  // ── Bulk stock update ──
+  const bulkUpdateStock = useMutation({
+    mutationFn: async () => {
+      const updates = Object.entries(bulkEdits).filter(([, val]) => val !== "");
+      for (const [id, stock] of updates) {
+        const { error } = await supabase.from("products").update({ stock: parseInt(stock) || 0 }).eq("id", id);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tracking-products"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-products"] });
+      toast.success(`Stock updated for ${Object.keys(bulkEdits).length} products`);
+      setBulkEdits({});
+      setBulkMode(false);
+    },
+    onError: () => toast.error("Failed to update stock"),
+  });
+
   // ── Inventory helpers ──
   const categories = [...new Set(products?.map((p) => p.category) ?? [])];
 
@@ -65,13 +87,13 @@ export default function AdminTracking() {
     return matchSearch && matchCategory;
   });
 
-  const inStockCount = products?.filter((p) => p.stock > 50).length ?? 0;
-  const lowStockCount = products?.filter((p) => p.stock > 0 && p.stock <= 50).length ?? 0;
+  const inStockCount = products?.filter((p) => p.stock > LOW_STOCK_THRESHOLD).length ?? 0;
+  const lowStockCount = products?.filter((p) => p.stock > 0 && p.stock <= LOW_STOCK_THRESHOLD).length ?? 0;
   const outOfStockCount = products?.filter((p) => p.stock === 0).length ?? 0;
 
   const stockStatus = (stock: number) => {
     if (stock === 0) return { label: "Out of Stock", color: "bg-red-100 text-red-700", icon: AlertTriangle };
-    if (stock <= 50) return { label: "Low Stock", color: "bg-amber-100 text-amber-700", icon: AlertTriangle };
+    if (stock <= LOW_STOCK_THRESHOLD) return { label: "Low Stock", color: "bg-amber-100 text-amber-700", icon: AlertTriangle };
     return { label: "In Stock", color: "bg-green-100 text-green-700", icon: CheckCircle };
   };
 
@@ -125,6 +147,13 @@ export default function AdminTracking() {
     });
   };
 
+  const enterBulkMode = () => {
+    setBulkMode(true);
+    const edits: Record<string, string> = {};
+    filteredProducts?.forEach((p) => { edits[p.id] = String(p.stock); });
+    setBulkEdits(edits);
+  };
+
   return (
     <div className="p-8">
       <div className="mb-8">
@@ -140,6 +169,20 @@ export default function AdminTracking() {
 
         {/* ════════ INVENTORY TAB ════════ */}
         <TabsContent value="inventory" className="space-y-6">
+          {/* Low stock alert banner */}
+          {(lowStockCount > 0 || outOfStockCount > 0) && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
+              <Bell className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-display font-semibold text-red-800 text-sm">Stock Alert</h3>
+                <p className="text-xs text-red-700 mt-1">
+                  {outOfStockCount > 0 && <>{outOfStockCount} product{outOfStockCount > 1 ? "s" : ""} out of stock. </>}
+                  {lowStockCount > 0 && <>{lowStockCount} product{lowStockCount > 1 ? "s" : ""} running low (≤{LOW_STOCK_THRESHOLD} packs).</>}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Summary cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
@@ -156,17 +199,31 @@ export default function AdminTracking() {
             </div>
           </div>
 
-          {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search products..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
+          {/* Filters + Bulk Mode */}
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="flex flex-col sm:flex-row gap-4 flex-1">
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Search products..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <Button variant={filterCategory === "all" ? "default" : "outline"} size="sm" onClick={() => setFilterCategory("all")}>All</Button>
+                {categories.map((cat) => (
+                  <Button key={cat} variant={filterCategory === cat ? "default" : "outline"} size="sm" onClick={() => setFilterCategory(cat)}>{cat}</Button>
+                ))}
+              </div>
             </div>
             <div className="flex gap-2">
-              <Button variant={filterCategory === "all" ? "default" : "outline"} size="sm" onClick={() => setFilterCategory("all")}>All</Button>
-              {categories.map((cat) => (
-                <Button key={cat} variant={filterCategory === cat ? "default" : "outline"} size="sm" onClick={() => setFilterCategory(cat)}>{cat}</Button>
-              ))}
+              {bulkMode ? (
+                <>
+                  <Button size="sm" variant="hero" onClick={() => bulkUpdateStock.mutate()} disabled={bulkUpdateStock.isPending}>
+                    {bulkUpdateStock.isPending ? "Saving..." : "Save All"}
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => { setBulkMode(false); setBulkEdits({}); }}>Cancel</Button>
+                </>
+              ) : (
+                <Button size="sm" variant="outline" onClick={enterBulkMode}>Bulk Update Stock</Button>
+              )}
             </div>
           </div>
 
@@ -191,11 +248,22 @@ export default function AdminTracking() {
                     {filteredProducts?.map((product) => {
                       const status = stockStatus(product.stock);
                       return (
-                        <tr key={product.id} className="border-b border-border last:border-0 hover:bg-secondary/30 transition-colors">
+                        <tr key={product.id} className={`border-b border-border last:border-0 hover:bg-secondary/30 transition-colors ${product.stock === 0 ? "bg-red-50/50" : product.stock <= LOW_STOCK_THRESHOLD ? "bg-amber-50/50" : ""}`}>
                           <td className="px-4 py-3 font-medium text-foreground">{product.name}</td>
                           <td className="px-4 py-3 text-muted-foreground">{product.category}</td>
                           <td className="px-4 py-3 text-muted-foreground text-xs">{product.flavors?.join(", ") || "—"}</td>
-                          <td className="px-4 py-3 font-body font-semibold text-foreground">{product.stock} packs</td>
+                          <td className="px-4 py-3">
+                            {bulkMode ? (
+                              <Input
+                                type="number"
+                                className="w-20 h-7 text-xs"
+                                value={bulkEdits[product.id] ?? String(product.stock)}
+                                onChange={(e) => setBulkEdits({ ...bulkEdits, [product.id]: e.target.value })}
+                              />
+                            ) : (
+                              <span className="font-body font-semibold text-foreground">{product.stock} packs</span>
+                            )}
+                          </td>
                           <td className="px-4 py-3">
                             <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${status.color}`}>{status.label}</span>
                           </td>
@@ -212,7 +280,6 @@ export default function AdminTracking() {
 
         {/* ════════ DELIVERY TAB ════════ */}
         <TabsContent value="delivery" className="space-y-6">
-          {/* Delivery summary */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-amber-700 font-body">{orders?.filter((o) => o.status === "Processing").length ?? 0}</div>

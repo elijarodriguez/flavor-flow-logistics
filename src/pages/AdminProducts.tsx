@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Plus, Pencil, Trash2, Upload, Image } from "lucide-react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 
 interface ProductForm {
@@ -28,6 +28,8 @@ export default function AdminProducts() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductForm>(emptyForm);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["admin-products"],
@@ -37,6 +39,32 @@ export default function AdminProducts() {
       return data;
     },
   });
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const { error } = await supabase.storage.from("product-images").upload(fileName, file);
+    if (error) {
+      toast.error("Failed to upload image");
+      setUploading(false);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(fileName);
+    setForm({ ...form, image_url: urlData.publicUrl });
+    setUploading(false);
+    toast.success("Image uploaded!");
+  };
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -127,7 +155,31 @@ export default function AdminProducts() {
                 <div><Label>Stock</Label><Input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} /></div>
               </div>
               <div><Label>Flavors (comma-separated)</Label><Input value={form.flavors} onChange={(e) => setForm({ ...form, flavors: e.target.value })} placeholder="Original, Spicy, Cheese" /></div>
-              <div><Label>Image URL</Label><Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." /></div>
+              
+              {/* Image Upload */}
+              <div>
+                <Label>Product Image</Label>
+                <div className="mt-1.5 space-y-2">
+                  {form.image_url && (
+                    <div className="relative w-full h-32 rounded-lg overflow-hidden border border-border bg-muted">
+                      <img src={form.image_url} alt="Preview" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                  <div className="flex gap-2">
+                    <Button type="button" variant="outline" size="sm" className="flex-1" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                      <Upload className="h-3 w-3 mr-1" />{uploading ? "Uploading..." : "Upload Image"}
+                    </Button>
+                    {form.image_url && (
+                      <Button type="button" variant="outline" size="sm" onClick={() => setForm({ ...form, image_url: "" })}>
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    )}
+                  </div>
+                  <Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="Or paste image URL" className="text-xs" />
+                </div>
+              </div>
+
               <div className="flex items-center gap-2">
                 <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} id="active" />
                 <Label htmlFor="active">Active (visible to customers)</Label>
@@ -148,6 +200,14 @@ export default function AdminProducts() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {products?.map((product) => (
             <div key={product.id} className="bg-card rounded-xl border border-border overflow-hidden" style={{ boxShadow: "var(--card-shadow)" }}>
+              {/* Product thumbnail */}
+              <div className="h-36 bg-muted flex items-center justify-center overflow-hidden">
+                {product.image_url ? (
+                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                ) : (
+                  <Image className="h-8 w-8 text-muted-foreground" />
+                )}
+              </div>
               <div className="p-5">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-display text-lg font-semibold text-foreground">{product.name}</h3>
@@ -156,7 +216,7 @@ export default function AdminProducts() {
                   </Badge>
                 </div>
                 <Badge className="bg-primary/10 text-primary border-0 mb-2">{product.category}</Badge>
-                <p className="text-sm text-muted-foreground mb-2">{product.description}</p>
+                <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{product.description}</p>
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-bold text-primary">₱{Number(product.price).toFixed(2)}</span>
                   <span className="text-xs text-muted-foreground">Stock: {product.stock}</span>
