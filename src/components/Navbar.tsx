@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ShoppingCart } from "lucide-react";
+import logo from "@/assets/jimmela_logo.jpg";
 import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
 
@@ -18,8 +19,9 @@ export function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-6">
-        <Link to="/" className="font-display text-xl font-bold text-foreground">
-          Jimmela <span className="text-primary">Food Products</span>
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logo} alt="Jimmela Food Products" className="h-10 w-10 rounded-full object-cover" />
+          <span className="font-display text-xl font-bold text-foreground">Jimmela <span className="text-primary">Food Products</span></span>
         </Link>
 
         {/* Desktop nav */}

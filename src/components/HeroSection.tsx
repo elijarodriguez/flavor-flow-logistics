@@ -9,19 +9,19 @@ export function HeroSection() {
         alt="Assorted siomai dumplings"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, hsl(20 20% 8% / 0.75), hsl(12 76% 46% / 0.25))" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, hsl(0 0% 6% / 0.75), hsl(0 85% 46% / 0.3))" }} />
 
       <div className="relative z-10 container mx-auto px-6">
         <div className="max-w-2xl animate-fade-up">
-          <span className="inline-block text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "hsl(38 92% 60%)" }}>
+          <span className="inline-block text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "hsl(0 85% 65%)" }}>
             Premium Frozen Foods
           </span>
-          <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight mb-6" style={{ color: "hsl(30 25% 97%)" }}>
+          <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight mb-6" style={{ color: "hsl(0 0% 100%)" }}>
             Authentic Filipino
             <br />
             <span className="text-gradient">Flavors</span> Delivered
           </h1>
-          <p className="text-lg md:text-xl mb-8 max-w-lg" style={{ color: "hsl(30 15% 80%)" }}>
+          <p className="text-lg md:text-xl mb-8 max-w-lg" style={{ color: "hsl(0 0% 80%)" }}>
             We manufacture and supply Siomai, our famous Longganisa Calumpit, Skinless, Chili-Garlic, and more. Start your own business at a very affordable price!
           </p>
           <div className="flex flex-wrap gap-4">
@@ -31,7 +31,7 @@ export function HeroSection() {
               </Button>
             </a>
             <a href="#franchise">
-              <Button variant="heroOutline" size="lg" style={{ borderColor: "hsl(30 25% 97%)", color: "hsl(30 25% 97%)" }}>
+              <Button variant="heroOutline" size="lg" style={{ borderColor: "hsl(0 0% 100%)", color: "hsl(0 0% 100%)" }}>
                 Franchise With Us
               </Button>
             </a>
