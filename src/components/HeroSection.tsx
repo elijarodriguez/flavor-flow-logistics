@@ -21,7 +21,7 @@ export function HeroSection() {
             <br />
             <span className="text-gradient">Flavors</span> Delivered
           </h1>
-          <p className="text-lg md:text-xl mb-8 max-w-lg" style={{ color: "hsl(30 15% 80%)" }}>
+          <p className="text-lg md:text-xl mb-8 max-w-lg" style={{ color: "hsl(0 0% 80%)" }}>
             We manufacture and supply Siomai, our famous Longganisa Calumpit, Skinless, Chili-Garlic, and more. Start your own business at a very affordable price!
           </p>
           <div className="flex flex-wrap gap-4">
