@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Pencil, Trash2, Upload, Image } from "lucide-react";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
@@ -62,6 +62,7 @@ export default function AdminProducts() {
 
     const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(fileName);
     setForm({ ...form, image_url: urlData.publicUrl });
+    if (fileInputRef.current) fileInputRef.current.value = "";
     setUploading(false);
     toast.success("Image uploaded!");
   };
@@ -89,10 +90,12 @@ export default function AdminProducts() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products"] });
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["tracking-products"] });
       toast.success(editingId ? "Product updated" : "Product added");
       setDialogOpen(false);
       setEditingId(null);
       setForm(emptyForm);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     },
     onError: () => toast.error("Failed to save product"),
   });
@@ -105,6 +108,7 @@ export default function AdminProducts() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products"] });
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["tracking-products"] });
       toast.success("Product deleted");
     },
     onError: () => toast.error("Failed to delete product"),
@@ -128,6 +132,7 @@ export default function AdminProducts() {
   const openNew = () => {
     setEditingId(null);
     setForm(emptyForm);
+    if (fileInputRef.current) fileInputRef.current.value = "";
     setDialogOpen(true);
   };
 
@@ -138,13 +143,26 @@ export default function AdminProducts() {
           <h1 className="font-display text-3xl font-bold text-foreground">Products</h1>
           <p className="text-muted-foreground mt-1">Manage your food product catalog</p>
         </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <Dialog
+          open={dialogOpen}
+          onOpenChange={(open) => {
+            setDialogOpen(open);
+            if (!open) {
+              setEditingId(null);
+              setForm(emptyForm);
+              if (fileInputRef.current) fileInputRef.current.value = "";
+            }
+          }}
+        >
           <DialogTrigger asChild>
             <Button variant="hero" onClick={openNew}><Plus className="h-4 w-4 mr-2" />Add Product</Button>
           </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle className="font-display">{editingId ? "Edit Product" : "Add Product"}</DialogTitle>
+              <DialogDescription>
+                Add or update product details and customer-facing visibility.
+              </DialogDescription>
             </DialogHeader>
             <form onSubmit={(e) => { e.preventDefault(); saveMutation.mutate(); }} className="space-y-3">
               <div><Label>Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required /></div>
