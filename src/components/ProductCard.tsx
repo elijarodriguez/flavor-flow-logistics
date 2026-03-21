@@ -34,8 +34,7 @@ export function ProductCard({ id, name, category, description, price, imageUrl, 
 
   // Map known product names to local assets for seeded products
   const getImageSrc = () => {
-    if (imageUrl?.startsWith("http")) return imageUrl;
-    // fallback to placeholder
+    if (imageUrl) return imageUrl;
     return "/placeholder.svg";
   };
 

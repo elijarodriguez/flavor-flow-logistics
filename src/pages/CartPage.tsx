@@ -72,7 +72,8 @@ export default function CartPage() {
       toast.success("Order placed successfully! We'll contact you soon.");
       navigate("/");
     } catch (err) {
-      toast.error("Failed to place order. Please try again.");
+      const message = err instanceof Error ? err.message : "Failed to place order. Please try again.";
+      toast.error(message.includes("row-level security") ? "Checkout is now protected. Please try placing the order again." : "Failed to place order. Please try again.");
     } finally {
       setSubmitting(false);
     }

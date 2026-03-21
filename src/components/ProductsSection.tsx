@@ -54,7 +54,7 @@ export function ProductsSection() {
                 category={product.category}
                 description={product.description}
                 price={product.price}
-                imageUrl={localImages[product.name] || product.image_url}
+                imageUrl={product.image_url || localImages[product.name]}
                 flavors={product.flavors}
                 index={i}
               />

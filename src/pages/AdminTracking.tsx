@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Search, Package, Truck, AlertTriangle, CheckCircle, Clock, Bell } from "lucide-react";
 import { toast } from "sonner";
 
@@ -370,6 +370,9 @@ export default function AdminTracking() {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="font-display">Ship Order</DialogTitle>
+            <DialogDescription>
+              Add courier details and tracking information before marking the order as shipped.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
