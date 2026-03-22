@@ -36,6 +36,9 @@ export function ProductsSection() {
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Carefully crafted with the finest ingredients — perfect for reselling, food carts, and small businesses.
           </p>
+          <p className="text-sm text-muted-foreground mt-4 max-w-xl mx-auto">
+            For orders and inquiries, please message our Facebook page directly.
+          </p>
         </div>
 
         {isLoading ? (
