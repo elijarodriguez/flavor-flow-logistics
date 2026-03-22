@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart } from "lucide-react";
-import { toast } from "sonner";
+import { MessageCircle } from "lucide-react";
+import { FACEBOOK_PAGE_URL } from "@/lib/contact";
 
 interface ProductCardProps {
   id: string;
@@ -17,20 +16,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ id, name, category, description, price, imageUrl, flavors, index }: ProductCardProps) {
-  const { addItem } = useCart();
   const [selectedFlavor, setSelectedFlavor] = useState<string | undefined>(flavors?.[0]);
-
-  const handleAdd = () => {
-    addItem({
-      productId: id,
-      name,
-      price,
-      quantity: 1,
-      flavor: selectedFlavor,
-      imageUrl: imageUrl ?? undefined,
-    });
-    toast.success(`${name}${selectedFlavor ? ` (${selectedFlavor})` : ""} added to cart`);
-  };
 
   // Map known product names to local assets for seeded products
   const getImageSrc = () => {
@@ -72,9 +58,16 @@ export function ProductCard({ id, name, category, description, price, imageUrl, 
             ))}
           </div>
         )}
-        <Button variant="hero" size="sm" className="w-full" onClick={handleAdd}>
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          Add to Cart
+        <Button variant="hero" size="sm" className="w-full" asChild>
+          <a
+            href={FACEBOOK_PAGE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Contact Jimmela Food Products to order ${name}${selectedFlavor ? ` in ${selectedFlavor}` : ""}`}
+          >
+            <MessageCircle className="h-4 w-4 mr-2" />
+            Contact to Order
+          </a>
         </Button>
       </div>
     </div>
