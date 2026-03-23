@@ -165,6 +165,10 @@ export async function createOrder(data: OrderForm): Promise<string | null> {
             ...data,
             total,
             status: "Pending" as const,
+            trackingNumber: null,
+            courier: null,
+            shippedAt: null,
+            deliveredAt: null,
             createdAt: now,
             updatedAt: now,
         };
