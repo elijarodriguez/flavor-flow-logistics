@@ -530,7 +530,7 @@ export default function AdminTracking() {
                                   {order.customerName}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
-                                  {order.customer_phone}
+                                  {order.customerPhone}
                                 </p>
                               </div>
                             </div>
