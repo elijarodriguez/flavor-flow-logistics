@@ -31,7 +31,7 @@ export default function AdminOrders() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      await updateOrder(id, { status });
+      await updateOrder(id, { status: status as "Pending" | "Processing" | "Shipped" | "Delivered" | "Cancelled" });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
