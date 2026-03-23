@@ -527,16 +527,16 @@ export default function AdminTracking() {
                               {deliveryStatusIcon(order.status)}
                               <div>
                                 <p className="font-medium text-foreground">
-                                  {order.customer_name}
+                                  {order.customerName}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
-                                  {order.customer_phone}
+                                  {order.customerPhone}
                                 </p>
                               </div>
                             </div>
                           </td>
                           <td className="px-4 py-3 text-muted-foreground text-xs max-w-48 truncate">
-                            {order.customer_address}
+                            {order.customerAddress}
                           </td>
                           <td className="px-4 py-3 font-semibold text-foreground">
                             ₱{Number(order.total).toLocaleString()}
@@ -551,7 +551,7 @@ export default function AdminTracking() {
                             </span>
                           </td>
                           <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
-                            {order.tracking_number || "—"}
+                            {order.trackingNumber || "—"}
                           </td>
                           <td className="px-4 py-3 text-muted-foreground text-xs">
                             {order.courier || "—"}
@@ -580,8 +580,8 @@ export default function AdminTracking() {
                               )}
                               {order.status === "Delivered" && (
                                 <span className="text-xs text-muted-foreground">
-                                  {order.delivered_at
-                                    ? new Date(order.delivered_at)
+                                  {order.deliveredAt
+                                    ? new Date(order.deliveredAt)
                                       .toLocaleDateString()
                                     : "Done"}
                                 </span>
@@ -615,7 +615,7 @@ export default function AdminTracking() {
             <p className="text-sm text-muted-foreground">
               Shipping to:{" "}
               <strong className="text-foreground">
-                {selectedOrder?.customer_name}
+                {selectedOrder?.customerName}
               </strong>
             </p>
             <div>

@@ -75,10 +75,7 @@ export default function AdminProducts() {
       if (editingId) {
         await updateProduct(editingId, payload);
       } else {
-        await createProduct({
-          ...payload,
-          id: "",
-        });
+        await createProduct(payload);
       }
     },
     onSuccess: () => {

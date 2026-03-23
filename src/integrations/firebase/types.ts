@@ -30,10 +30,15 @@ export interface Order {
     customerName: string;
     customerEmail: string;
     customerPhone: string;
+    customerAddress: string;
     items: OrderItem[];
     total: number;
     status: "Pending" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
-    notes: string;
+    notes: string | null;
+    trackingNumber: string | null;
+    courier: string | null;
+    shippedAt: Date | null;
+    deliveredAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -50,8 +55,9 @@ export interface OrderForm {
     customerName: string;
     customerEmail: string;
     customerPhone: string;
+    customerAddress: string;
     items: OrderItem[];
-    notes: string;
+    notes: string | null;
 }
 
 // User role type
