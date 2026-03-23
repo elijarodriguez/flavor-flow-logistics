@@ -55,8 +55,9 @@ export interface OrderForm {
     customerName: string;
     customerEmail: string;
     customerPhone: string;
+    customerAddress: string;
     items: OrderItem[];
-    notes: string;
+    notes: string | null;
 }
 
 // User role type

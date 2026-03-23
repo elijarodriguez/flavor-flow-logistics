@@ -142,31 +142,14 @@ export default function AdminOrders() {
       let successCount = 0;
       for (const row of rows) {
         try {
-          await createOrder(
-            {
-              id: "",
-              customerName: row.customerName,
-              customerEmail: row.customerEmail,
-              customerPhone: row.customerPhone,
-              customerAddress: row.customerAddress,
-              status: row.status as
-                | "Pending"
-                | "Processing"
-                | "Shipped"
-                | "Delivered"
-                | "Cancelled",
-              total: row.total,
-              items: [],
-              courier: row.courier,
-              trackingNumber: row.trackingNumber,
-              notes: row.notes,
-              shippedAt: null,
-              deliveredAt: null,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-            [],
-          );
+          await createOrder({
+            customerName: row.customerName,
+            customerEmail: row.customerEmail,
+            customerPhone: row.customerPhone,
+            customerAddress: row.customerAddress,
+            items: [],
+            notes: row.notes,
+          });
           successCount++;
         } catch (error) {
           console.error("Error importing order:", error);

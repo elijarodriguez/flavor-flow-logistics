@@ -615,7 +615,7 @@ export default function AdminTracking() {
             <p className="text-sm text-muted-foreground">
               Shipping to:{" "}
               <strong className="text-foreground">
-                {selectedOrder?.customer_name}
+                {selectedOrder?.customerName}
               </strong>
             </p>
             <div>
