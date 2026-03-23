@@ -580,8 +580,8 @@ export default function AdminTracking() {
                               )}
                               {order.status === "Delivered" && (
                                 <span className="text-xs text-muted-foreground">
-                                  {order.delivered_at
-                                    ? new Date(order.delivered_at)
+                                  {order.deliveredAt
+                                    ? new Date(order.deliveredAt)
                                       .toLocaleDateString()
                                     : "Done"}
                                 </span>
