@@ -536,7 +536,7 @@ export default function AdminTracking() {
                             </div>
                           </td>
                           <td className="px-4 py-3 text-muted-foreground text-xs max-w-48 truncate">
-                            {order.customer_address}
+                            {order.customerAddress}
                           </td>
                           <td className="px-4 py-3 font-semibold text-foreground">
                             ₱{Number(order.total).toLocaleString()}
