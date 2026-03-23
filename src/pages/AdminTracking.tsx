@@ -527,7 +527,7 @@ export default function AdminTracking() {
                               {deliveryStatusIcon(order.status)}
                               <div>
                                 <p className="font-medium text-foreground">
-                                  {order.customer_name}
+                                  {order.customerName}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
                                   {order.customer_phone}
