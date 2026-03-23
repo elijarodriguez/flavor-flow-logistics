@@ -551,7 +551,7 @@ export default function AdminTracking() {
                             </span>
                           </td>
                           <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
-                            {order.tracking_number || "—"}
+                            {order.trackingNumber || "—"}
                           </td>
                           <td className="px-4 py-3 text-muted-foreground text-xs">
                             {order.courier || "—"}
