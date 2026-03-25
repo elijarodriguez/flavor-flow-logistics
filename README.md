@@ -1,73 +1,180 @@
-# Welcome to your Lovable project
+# Jimmela — Snack E-Commerce Platform
 
-## Project info
+## Overview
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Jimmela is a full-stack snack e-commerce platform built with **React + TypeScript + Firebase**. It features a public-facing storefront for customers and a comprehensive admin dashboard for business operations.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🌐 Public Website (Client Side)
 
-**Use Lovable**
+The customer-facing website is a single-page application designed to showcase products and drive sales.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### Pages & Sections
 
-Changes made via Lovable will be committed automatically to this repo.
+| Section | Description |
+|---------|-------------|
+| **Hero** | Eye-catching landing banner with brand messaging and call-to-action |
+| **Products** | Browsable product catalog with categories, flavors, and pricing |
+| **Franchise** | Information section for potential franchise partners |
+| **Contact** | Contact form for customer inquiries (integrated with email) |
+| **Footer** | Business links, social media, and brand info |
+| **WhatsApp Button** | Floating button for instant customer support via WhatsApp |
 
-**Use your preferred IDE**
+### Key Features
+- Responsive design (mobile, tablet, desktop)
+- Product cards with images, descriptions, pricing, and flavor options
+- Smooth scroll navigation between sections
+- SEO-optimized with semantic HTML
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🔒 Admin Dashboard (Tracking & Management)
 
-Follow these steps:
+The admin side is a protected multi-page dashboard accessible only to authenticated administrators.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Authentication
+- Firebase Authentication (email/password)
+- Role-based access control via Firestore `user_roles` collection
+- Protected routes — unauthorized users are redirected to the login page
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Admin Pages
 
-# Step 3: Install the necessary dependencies.
-npm i
+| Page | Route | Description |
+|------|-------|-------------|
+| **Dashboard** | `/admin` | Overview with key metrics and quick stats |
+| **Products** | `/admin/products` | Full CRUD for product catalog (name, price, stock, flavors, category, image) |
+| **Orders** | `/admin/orders` | View, filter, and manage customer orders; CSV import support |
+| **Tracking** | `/admin/tracking` | Inventory monitoring + delivery lifecycle management |
+| **Settings** | `/admin/settings` | Admin account and app configuration |
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Tracking System (Detail)
+
+The tracking page is split into two tabs:
+
+#### 📦 Inventory Tab
+- **Stock summary cards**: In Stock / Low Stock / Out of Stock counts
+- **Low stock alerts**: Banner warning when products fall below 50 packs or hit zero
+- **Product table**: Sortable list showing product name, category, flavors, current stock, status badge, and price
+- **Category filters**: Filter inventory by product category
+- **Search**: Find products by name
+- **Bulk stock update**: Enter edit mode to update stock levels for multiple products at once
+
+#### 🚚 Delivery Tab
+- **Delivery summary cards**: Processing / In Transit / Delivered counts
+- **Order table**: Lists all active orders with customer info, address, total, status, tracking number, and courier
+- **Ship order flow**: Dialog to add tracking number and courier details, then mark as "Shipped"
+- **Mark delivered**: One-click button to mark shipped orders as "Delivered" with timestamp
+- **Status badges**: Color-coded (amber → Processing, blue → Shipped, green → Delivered)
+
+---
+
+## 🗄️ Database Schema (Firebase Firestore)
+
+### Collections
+
+#### `products`
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Product name |
+| `category` | string | Product category |
+| `description` | string | Product description |
+| `price` | number | Price in PHP (₱) |
+| `stock` | number | Current stock in packs |
+| `flavors` | string[] | Available flavors |
+| `imageUrl` | string | Product image URL |
+| `isActive` | boolean | Whether product is visible |
+| `createdAt` | timestamp | Creation date |
+| `updatedAt` | timestamp | Last update date |
+
+#### `orders`
+| Field | Type | Description |
+|-------|------|-------------|
+| `customerName` | string | Customer full name |
+| `customerEmail` | string | Customer email |
+| `customerPhone` | string | Customer phone number |
+| `customerAddress` | string | Delivery address |
+| `items` | array | List of ordered items (productId, name, qty, price, flavor) |
+| `total` | number | Order total in PHP |
+| `status` | string | Pending → Processing → Shipped → Delivered / Cancelled |
+| `trackingNumber` | string \| null | Courier tracking number |
+| `courier` | string \| null | Courier name (e.g. J&T, LBC) |
+| `shippedAt` | timestamp \| null | When order was shipped |
+| `deliveredAt` | timestamp \| null | When order was delivered |
+| `notes` | string \| null | Admin notes |
+| `createdAt` | timestamp | Order creation date |
+| `updatedAt` | timestamp | Last update date |
+
+#### `user_roles`
+| Field | Type | Description |
+|-------|------|-------------|
+| `uid` | string | Firebase Auth user ID |
+| `role` | string | `admin` or `user` |
+| `createdAt` | timestamp | Role assignment date |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, TypeScript, Vite |
+| Styling | Tailwind CSS, shadcn/ui |
+| State | TanStack React Query |
+| Routing | React Router v6 |
+| Backend | Firebase (Auth, Firestore) |
+| Icons | Lucide React |
+| Notifications | Sonner (toast) |
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/              # shadcn/ui primitives
+│   ├── Navbar.tsx        # Navigation bar
+│   ├── HeroSection.tsx   # Landing hero
+│   ├── ProductsSection.tsx
+│   ├── ContactSection.tsx
+│   ├── Footer.tsx
+│   └── WhatsAppButton.tsx
+├── contexts/
+│   └── AuthContext.tsx   # Firebase auth state provider
+├── integrations/
+│   └── firebase/
+│       ├── config.ts     # Firebase app initialization
+│       ├── firestore.ts  # Firestore CRUD operations
+│       └── types.ts      # TypeScript interfaces
+├── pages/
+│   ├── Index.tsx         # Public homepage
+│   ├── AdminLogin.tsx    # Admin login page
+│   ├── AdminLayout.tsx   # Dashboard shell with sidebar
+│   ├── AdminDashboard.tsx
+│   ├── AdminProducts.tsx # Product CRUD
+│   ├── AdminOrders.tsx   # Order management
+│   ├── AdminTracking.tsx # Inventory + delivery tracking
+│   └── AdminSettings.tsx
+└── data/
+    └── products.ts       # Static product data (fallback)
+```
+
+---
+
+## 🚀 Getting Started
+
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Requires Firebase environment variables in `.env`:
+```
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+```
